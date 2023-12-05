@@ -1,0 +1,100 @@
+
+import pandas as pd
+import boto3
+import json
+
+class DataExtractor:
+  def extract_from_s3(DataExtractor, df):
+   DataExtractor.df = pd.read_json()
+   return df
+  
+  def __init__(self, DataExtractor, read_json, s3):
+     
+    self.DataExtractor = DataExtractor
+    self.read_json = read_json
+    self.s3 = s3
+
+bucket = 'daak-bucket'
+link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/date_details.json.'
+
+# link uploaded to daak-bucket to give a path
+# link path in daak-bucket = 's3://daak-bucket/date_details.json'
+path = 's3://daak-bucket/date_details.json'
+
+client = boto3.client('s3')
+
+path = 's3://daak-bucket/date_details.json'
+
+df =  pd.read_json(path)
+
+# s3f3 and botocore==1.33.5 were installed respectively to ensure efficient processing
+
+print(df)
+
+df.head()
+
+# cleaning data
+
+# - Drop duplicates 
+
+df = df.drop_duplicates()
+df
+
+
+# removing null values
+df = df.replace('null','')
+df
+
+df = df.fillna('')
+df
+
+# resetting index
+df = df.reset_index(drop=True)
+df
+
+df.info()
+
+
+
+#  upload_to_db method and store in a table called dim_date_times.
+
+ # df.to_sql('date_details', con=engine, if_exists='replace', index=False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

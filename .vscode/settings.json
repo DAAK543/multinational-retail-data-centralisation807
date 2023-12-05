@@ -1,0 +1,50 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5433,
+            "driver": "PostgreSQL",
+            "name": "pagila",
+            "database": "pagila",
+            "username": "postgres"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5433,
+            "driver": "PostgreSQL",
+            "name": "staff_db",
+            "database": "staff_db",
+            "username": "postgres"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5433,
+            "driver": "PostgreSQL",
+            "name": "sales_data",
+            "database": "sales_data",
+            "username": "postgres"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5433,
+            "driver": "PostgreSQL",
+            "name": "database-1.c7f2i0mwhdgu.eu-west-2.rds.amazonaws.com",
+            "database": "postgres",
+            "username": "postgres"
+        },
+        {
+            "previewLimit": 50,
+            "server": "data-handling-project-readonly.cq2e8zno855e.eu-west-1.rds.amazonaws.com",
+            "port": 5432,
+            "askForPassword": true,
+            "driver": "PostgreSQL",
+            "database": "postgres",
+            "username": "aicore_admin",
+            "name": "PostgreSQL  13"
+        }
+    ]
+}

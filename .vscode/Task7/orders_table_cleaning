@@ -1,0 +1,50 @@
+import yaml
+from sqlalchemy import create_engine
+from sqlalchemy import inspect
+import pandas as pd
+
+RDS_HOST ="data-handling-project-readonly.cq2e8zno855e.eu-west-1.rds.amazonaws.com"
+RDS_PORT = 5432
+RDS_DATABASE ='postgres'
+RDS_PASSWORD ='AiCore2022'
+RDS_USER ='aicore_admin'
+DATABASE_TYPE = 'postgresql'
+DBAPI = 'pyscopg2'
+
+class List:
+   
+   def __init__(self, get_table_names):
+      self.get_table_names = get_table_names
+
+   def list_db_tables():
+    
+    list_db_tables = insp.get_table_names()
+    return list_db_tables
+   
+engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
+insp = inspect(engine)
+print(insp.get_table_names())
+
+# Retrieving orders tables
+def upload_to_db(df):
+   upload_to_db.df() 
+   upload_to_db = pd.read_sql_table()
+   return df
+
+df = pd.read_sql_table('orders_table', engine)
+
+print(df)
+df
+
+# dropping columns first_name, last_name and 1 from orders_table
+
+df = df.drop(columns=['first_name', 'last_name', '1'], axis=1)
+
+df
+
+df.info()
+
+#  upload_to_db method and store in a table called orders_table
+
+# df.to_sql('orders_table', engine, if_exists='replace', index=False)
+
