@@ -1,0 +1,553 @@
+# Multinational Retail Data Centralisation
+
+
+#### Description
+
+This project involves the application of object-oriented programming to deploy the concept of classes and objects to structure and create instances for data extraction and cleaning. 
+
+
+#### Usage
+
+In this project, 3 clases are created which include database utilities, data extraction and data cleaning.  The database utilities class contains methods used for storing database and connecting to databases. The data extraction class contains methods to extract data from different types of sources, such as pdf files, an S3 bucket and an RDS database. While the The data cleaning class contains the methods to clean/verify all the data in each tables. 
+
+
+#### Milestone 1 
+
+Setup Github 
+
+
+
+#### Milestone 2 Extract and clean the data from data sources
+
+##### Task 1 
+
+Setup database called sale_data within pgadmin4 to store data
+
+
+##### Task 2  initialise 3 project classes 
+
+
+##### Step 1  database_utils.py
+
+class DatabaseConnector:
+
+
+#####  step 2 data_extraction.py
+
+
+Class DataExtraction:
+
+
+##### step 3 data_cleaning.py
+
+Class DataCleaning:
+
+
+
+##### Task 3  Extract and clean the user data
+
+##### Step 1  
+
+create  yaml file db_creds.yaml containing the credentials below
+
+.gitignore db_creds.yaml
+
+
+
+RDS_HOST ="data-handling-project-readonly.cq2e8zno855e.eu-west-1.rds.amazonaws.com"
+RDS_PORT = 5432
+RDS_DATABASE ='postgres'
+RDS_PASSWORD ='AiCore2022'
+RDS_USER ='aicore_admin'
+DATABASE_TYPE = 'postgresql'
+DBAPI = 'pyscopg2'
+
+##### Step 2 read_db_creds method to read the yaml credentials 
+import yaml
+
+class DatabaseConnector:
+
+    def read_db_creds(self):
+      
+      # read_db_creds in db_creds.yaml, reads and returns a dictionary of the credentials.
+      with open("db_creds.yaml", 'r') as file:
+        read_db_creds = yaml.safe_load(file)
+             
+        #print(read_db_creds)
+
+
+    Creating an instance 
+
+      __init__ is the constructor
+
+    def __init__(self, RDS_HOST, RDS_PORT, RDS_DATABASE, RDS_USER, RDS_PASSWORD):
+        self.RDS_HOST = RDS_HOST
+        self.RDS_PORT = RDS_PORT
+        self.RDS_DATABASE = RDS_DATABASE
+        self.RDS_USER = RDS_USER
+        self.RDS_PASSWORD = RDS_PASSWORD
+        
+       
+    creating a class instance
+
+    def database_connector(loader, node):
+        values = loader.connect_mapping(node)
+        return DatabaseConnector(values['RDS_HOST'], values['RDS_PORT'], values['RDS_DATABASE'], values['RDS_USER'], values['RDS_PASSWORD'])
+
+   
+        #print(read_db_creds)
+
+#Creating an instance of the class
+
+connector = DatabaseConnector('RDS_HOST', 'RDS_PORT', 'RDS_DATABASE', 'RDS_USER', 'RDS_PASSWORD') 
+read_db_creds = connector.read_db_creds()    
+
+
+##### Step 3 creating an _init_db_engine method to read credentials from the return of read_db_creds and initialise and return an sqlalchemy database engine.
+
+  _init_db_engine method
+
+
+from sqlalchemy import create_engine
+from sqlalchemy import inspect
+
+class Connector:
+
+ def _init_db_engine():
+     connector = DatabaseConnector('RDS_HOST', 'RDS_PORT', 'RDS_DATABASE', 'RDS_USER', 'RDS_PASSWORD') 
+     engine.connect = connector.read_db_creds()  
+      
+     def __init__(self, engine):
+       
+       self.engine = engine
+       
+       return engine
+       
+engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
+
+##### Step 4 getting a list of table names in the database using list_db_tables method
+
+class DataExtractor:
+   
+   def __init__(self, get_table_names):
+      self.get_table_names = get_table_names
+
+   def list_db_tables():
+    
+    list_db_tables = insp.get_table_names()
+    return list_db_tables
+   
+engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
+insp = inspect(engine)
+print(insp.get_table_names())
+
+##### To get schema information and schema public
+
+inspector = inspect(engine)
+schemas = inspector.get_schema_names()
+for schema in schemas:
+    print("schema: %s" % schema)
+
+##### To get column information
+
+    for table_name in inspector.get_table_names(schema=schema):
+        for column in inspector.get_columns(table_name, schema=schema):
+            print("Column: %s" % column)
+
+##### To get column with name.
+
+for table_name in inspector.get_table_names():
+   for column in inspector.get_columns(table_name):
+       print("Column: %s" % column['name'])
+
+
+##### Step 5 Using read_db_creds method in the DataExtractor class to extract database tables to a Dataframe
+
+import sqlalchemy
+from sqlalchemy import create_engine
+from sqlalchemy import inspect
+import pandas as pd
+
+
+RDS_HOST ="data-handling-project-readonly.cq2e8zno855e.eu-west-1.rds.amazonaws.com"
+RDS_PORT = 5432
+RDS_DATABASE ='postgres'
+RDS_PASSWORD ='AiCore2022'
+RDS_USER ='aicore_admin'
+DATABASE_TYPE = 'postgresql'
+
+
+class DataExtractor: 
+
+    def read_rds_tables(connector):
+            engine = connector.create_engine
+            return engine
+    def list_db_tables():
+     list_db_tables = insp.get_table_names()
+     return list_db_tables
+    engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
+    insp = inspect(engine)
+    print(insp.get_table_names())
+
+from list of tables printed (legacy_store_details, legacy_users, orders_table) read each table and return dataframe
+
+
+    def read_rds_tables(df):
+     read_rds_tables.df()
+     read_rds_tables = pd.read_sql_table()
+     return df
+
+     
+    engine = sqlalchemy.create_engine(f"postgresql://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
+ 
+    df = pd.read_sql_table("legacy_store_details", engine)
+    print(df)
+
+    df = pd.read_sql_table("legacy_users", engine)
+    print(df)
+    
+    df = pd.read_sql_table("orders_table", engine)
+    print(df)
+
+
+
+##### Step 6 create clean_user_data method in DataCleaning class to clean user data
+
+legacy_users is the primary user data.
+
+
+class DataCleaning: 
+   
+    
+ def clean_user_data(df):
+     clean_user_data.df()
+     clean_user_data = pd.read_sql_table()
+     return df
+
+df = pd.read_sql_table("legacy_users", engine)
+print(df)
+
+ Cleaning legacy_user_table data in Dataframe
+
+  - Drop duplicates in legacy_users table user data
+
+    df = df.drop_duplicates()
+    df
+
+ - #cleaning phone numbers  
+   #df["phone_number"].str.replace('[^a-zA-Z0-9]','')
+
+   #df["phone_number"] = df["phone_number"].apply(lambda x: str(x))
+
+   #df["phone_number"] = df["phone_number"].apply(lambda x: x[0:3] + '-' + x[3:6] + '-' + x[6:10])
+
+   df
+
+ - Removing null values
+
+   df = df.replace('null','')
+   df
+
+   df = df.fillna('')
+   df
+
+ - Resetting index
+   df = df.reset_index(drop=True)
+   df
+
+ - cleaning dates
+
+   #df["join_date"] = pd.to_datetime(df['join_date'])
+
+
+   #df["date_of_birth"] = pd.to_datetime(df['date_of_birth'])
+
+   #df.date_of_birth = pd.to_datetime(df.date_of_birth).dt.strftime('%d-%b-%Y')
+   #print (df)
+
+
+   df.info()
+
+
+##### Step 7
+
+##### Step 8
+
+##### Task 4 Extracting users and cleaning card details
+
+##### Step 1 
+
+install tabula-py to extract data from a pdf document
+
+##### step 2 create a method in the DatExtractor class called retrieve_pdf_data that takes a link as argument and returns a pandas Dataframe
+
+import pandas as pd 
+import tabula 
+from tabula import read_pdf
+
+
+
+pdf_path = "https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf"
+
+class DataExtractor:
+
+ def retrieve_pdf_data(DataExtractor, df):
+  DataExtractor.df = df.read_pdf(df)
+  return df
+ 
+
+ def __init__(self, read_pdf):
+ 
+  self.read_pdf = read_pdf
+
+    
+ df = tabula.read_pdf(pdf_path, pages="all")
+ print(df)
+ print(len(df))
+ df[0]
+
+##### Step 3 create a method called clean_card_data  in the DataCleaning class to remove any errors or Null values
+
+class DataCleaning: 
+  def  clean_card_data(DataCleaning, df):
+   DataCleaning = clean_card_data.df()
+   clean_card_data = DataCleaning
+   return df
+  
+  def __init__(self, read_pdf, DataCleaning):
+     self.read_pdf = read_pdf
+     self.DataCleaning = DataCleaning
+    
+  df = tabula.read_pdf(pdf_path, pages="all")
+  print(df)
+  
+  Cleaning card data   
+
+ - Drop duplicates in clean_card_data
+
+   df = pd.DataFrame()
+   df 
+
+   df = df.drop_duplicates()
+   df
+
+ - Removing null values
+  df = df.replace('null','')
+  df
+
+  df = df.fillna('')
+  df
+
+
+ - Cleaning dates
+   #df["date_payment_confirmed"] = pd.to_datetime(df["date_payment_confirmed"])
+
+
+ - Resetting index
+  df = df.reset_index(drop=True)
+  df
+
+  df.info()
+
+##### Step 4 upload table with upload_to_db method to the database in a table called dim_card_details.
+
+  def upload_to_db(dim_card_details, df):
+   df.upload_to_db = dim_card_details.append
+   dim_card_details.append = dim_card_details
+   return df
+     
+  #df = df.to_sql('dim_card_details', engine, if_exists='append')
+
+   Error notification (Internal Error)
+
+
+##### Task 5
+
+
+##### Task 6 Extract and clean product details
+
+import boto3
+import pandas as pd
+import csv
+import io
+from io import StringIO
+
+ Set your AWS credentials and region
+
+BUCKET_NAME = "daak-bucket"
+
+KEY = "s3://data-handling-public/products.csv"
+
+
+class DataExtractor:
+  def extract_from_s3(DataExtractor, df):
+   DataExtractor.df = pd.read_csv()
+   return df
+  
+  def __init__(self, DataExtractor, read_csv, s3):
+     
+    self.DataExtractor = DataExtractor
+    self.read_csv = read_csv
+    self.s3 = s3
+
+
+Initialize the s3c client
+
+  def s3c(boto3):
+   s3c.get_object(**kwargs)
+   return s3c
+
+s3c = boto3.client('s3')
+
+Specify the S3 bucket and object key of the CSV file
+
+Bucket_name = 'daak-bucket' 
+
+file_key = 's3://data-handling-public/products.csv'
+
+Read the CSV file from S3
+
+object = s3c.get_object(Bucket=Bucket_name, Key=file_key)
+
+csv_content = object['Body'].read().decode('utf-8')
+
+Create a Pandas DataFrame
+        
+df = pd.read_csv(io.StringIO(csv_content))
+print(df)
+df.head(5)
+
+An error occured when calling getobject operation - no table was retrieved
+
+Therefore I could not move to the next steps on Task 6
+
+
+
+##### Task 7 Retrieve and clean the orders table
+
+import yaml
+from sqlalchemy import create_engine
+from sqlalchemy import inspect
+import pandas as pd
+
+RDS_HOST ="data-handling-project-readonly.cq2e8zno855e.eu-west-1.rds.amazonaws.com"
+RDS_PORT = 5432
+RDS_DATABASE ='postgres'
+RDS_PASSWORD ='AiCore2022'
+RDS_USER ='aicore_admin'
+DATABASE_TYPE = 'postgresql'
+DBAPI = 'pyscopg2'
+
+class List:
+   
+   def __init__(self, get_table_names):
+      self.get_table_names = get_table_names
+
+   def list_db_tables():
+    
+    list_db_tables = insp.get_table_names()
+    return list_db_tables
+   
+engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
+insp = inspect(engine)
+print(insp.get_table_names())
+
+ - Retrieving orders tables
+
+def upload_to_db(df):
+   upload_to_db.df() 
+   upload_to_db = pd.read_sql_table()
+   return df
+
+df = pd.read_sql_table('orders_table', engine)
+
+print(df)
+df
+
+
+Cleaning orders table
+
+ dropping columns first_name, last_name and 1 from orders_table
+
+ df = df.drop(columns=['first_name', 'last_name', '1'], axis=1)
+
+ df
+
+df.info()
+
+
+ upload_to_db method and store in a table called orders_table
+
+ #df.to_sql('orders_table', engine, if_exists='replace', index=False)
+
+
+
+##### Task 8 Retrieve and clean the date events data
+
+import pandas as pd
+import boto3
+import json
+
+class DataExtractor:
+
+  def extract_from_s3(DataExtractor, df):
+   DataExtractor.df = pd.read_json()
+   return df
+  
+  def __init__(self, DataExtractor, read_json, s3):
+     
+    self.DataExtractor = DataExtractor
+    self.read_json = read_json
+    self.s3 = s3
+
+my s3 bucket from AWS console login
+
+bucket = 'daak-bucket'
+
+link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/date_details.json.'
+
+ link uploaded to daak-bucket to give a path
+
+ link path in daak-bucket = 's3://daak-bucket/date_details.json'
+
+ path = 's3://daak-bucket/date_details.json'
+
+client = boto3.client('s3')
+
+path = 's3://daak-bucket/date_details.json'
+
+df =  pd.read_json(path)
+
+s3f3 and botocore==1.33.5 were installed respectively to ensure efficient processing
+
+print(df)
+
+df.head()
+
+cleaning data
+
+ - Drop duplicates 
+
+df = df.drop_duplicates()
+df
+
+
+ - Removing null values
+
+df = df.replace('null','')
+df
+
+df = df.fillna('')
+df
+
+ - Resetting index
+
+df = df.reset_index(drop=True)
+df
+
+df.info()
+
+
+upload_to_db method and store in a table called dim_date_times.
+
+ #df.to_sql('date_details', con=engine, if_exists='replace', index=False)
