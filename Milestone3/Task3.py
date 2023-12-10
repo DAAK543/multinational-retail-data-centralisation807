@@ -13,4 +13,6 @@
 #| continent           | TEXT              | VARCHAR(255)           |
 #+---------------------+-------------------+------------------------+
 
-# df['final'] = '[' + df['Latitude'].astype(str) + ', ' + df['Longitude'].astype(str) + ']'
+#Merging latitude columns
+
+#df['final'] = '[' + df['Latitude'].astype(str) + ', ' + df['Longitude'].astype(str) + ']'

@@ -1,9 +1,11 @@
 # Multinational-retail-data-centralisation807
 
 
+
 ### Description
 
 This project involves the application of object-oriented programming to deploy the concept of classes and objects to structure and create instances for data extraction and cleaning. 
+
 
 
 #### Usage
@@ -11,25 +13,30 @@ This project involves the application of object-oriented programming to deploy t
 In this project, 3 clases are created which include database utilities, data extraction and data cleaning.  The database utilities class contains methods used for storing database and connecting to databases. The data extraction class contains methods to extract data from different types of sources, such as pdf files, an S3 bucket and an RDS database. While the The data cleaning class contains the methods to clean/verify all the data in each tables. 
 
 
-#### Milestone 1 
+### Milestone 1 
 
 Setup Github 
 
 
 
-#### Milestone 2 Extract and clean the data from data sources
 
-##### Task 1 
+### Milestone 2 Extract and clean the data from data sources
+
+
+#### Task 1 
 
 Setup database called sale_data within pgadmin4 to store data
 
 
-##### Task 2  initialise 3 project classes 
+
+#### Task 2  initialise 3 project classes 
+
 
 
 ##### Step 1  database_utils.py
 
 class DatabaseConnector:
+
 
 
 #####  step 2 data_extraction.py
@@ -38,13 +45,15 @@ class DatabaseConnector:
 Class DataExtraction:
 
 
+
 ##### step 3 data_cleaning.py
 
 Class DataCleaning:
 
 
 
-##### Task 3  Extract and clean the user data
+#### Task 3  Extract and clean the user data
+
 
 ##### Step 1  
 
@@ -61,6 +70,8 @@ RDS_PASSWORD ='AiCore2022'
 RDS_USER ='aicore_admin'
 DATABASE_TYPE = 'postgresql'
 DBAPI = 'pyscopg2'
+
+
 
 ##### Step 2 read_db_creds method to read the yaml credentials 
 import yaml
@@ -97,10 +108,12 @@ class DatabaseConnector:
    
         #print(read_db_creds)
 
+
 #Creating an instance of the class
 
 connector = DatabaseConnector('RDS_HOST', 'RDS_PORT', 'RDS_DATABASE', 'RDS_USER', 'RDS_PASSWORD') 
 read_db_creds = connector.read_db_creds()    
+
 
 
 ##### Step 3 creating an _init_db_engine method to read credentials from the return of read_db_creds and initialise and return an sqlalchemy database engine.
@@ -126,6 +139,8 @@ class Connector:
 engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
 
 
+
+
 ##### Step 4 getting a list of table names in the database using list_db_tables method
 
 class DataExtractor:
@@ -143,6 +158,8 @@ insp = inspect(engine)
 print(insp.get_table_names())
 
 
+
+
 ##### To get schema information and schema public
 
 inspector = inspect(engine)
@@ -150,17 +167,23 @@ schemas = inspector.get_schema_names()
 for schema in schemas:
     print("schema: %s" % schema)
 
+
 ##### To get column information
 
     for table_name in inspector.get_table_names(schema=schema):
         for column in inspector.get_columns(table_name, schema=schema):
             print("Column: %s" % column)
 
+
+
 ##### To get column with name.
 
 for table_name in inspector.get_table_names():
    for column in inspector.get_columns(table_name):
        print("Column: %s" % column['name'])
+
+
+
 
 
 ##### Step 5 Using read_db_creds method in the DataExtractor class to extract database tables to a Dataframe
@@ -210,6 +233,8 @@ from list of tables printed (legacy_store_details, legacy_users, orders_table) r
     
     df = pd.read_sql_table("orders_table", engine)
     print(df)
+
+
 
 
 
@@ -271,6 +296,8 @@ print(df)
    df.info()
 
 
+
+
 ##### Step 7
 
 upload table with upload_to_db method to sale_data database called dim_users
@@ -281,6 +308,8 @@ def upload_to_db(dim_users, df):
    return df
 
      
+
+
 ##### Step 8
 
 df.to_sql('dim_users', engine, if_exists='replace')
@@ -289,8 +318,7 @@ df.to_sql('dim_users', engine, if_exists='replace')
 
 
 
-
-##### Task 4 Extracting users and cleaning card details
+#### Task 4 Extracting users and cleaning card details
 
 
 ##### Step 1 
@@ -338,6 +366,8 @@ class DataExtractor:
  print(df)
  print(len(df))
  df[0]
+
+
 
 
 ##### Step 3 create a method called clean_card_data  in the DataCleaning class to remove any errors or Null values
@@ -398,10 +428,12 @@ class DataCleaning:
 
 
 
-##### Task 5
+#### Task 5
 
 
-##### Task 6 Extract and clean product details
+
+
+#### Task 6 Extract and clean product details
 
 import boto3
 import pandas as pd
@@ -460,7 +492,7 @@ Therefore I could not move to the next steps on Task 6
 
 
 
-##### Task 7 Retrieve and clean the orders table
+#### Task 7 Retrieve and clean the orders table
 
 import yaml
 from sqlalchemy import create_engine
@@ -511,12 +543,12 @@ df = df.drop(columns=['first_name', 'last_name', '1', 'level_0'], axis=1)
 
 df
 
-# Drop duplicates in orders_table
+#Drop duplicates in orders_table
 
 df = df.drop_duplicates()
 
 
-# Resetting index
+#Resetting index
 
 df = df.reset_index(drop=True)
 df
@@ -536,7 +568,7 @@ df.to_sql('orders_table', engine, index='False')
 
 
 
-##### Task 8 Retrieve and clean the date events data
+#### Task 8 Retrieve and clean the date events data
 
 import pandas as pd
 import boto3
@@ -606,14 +638,14 @@ df.info()
 RDS_HOST = 'database-1.c7f2i0mwhdgu.eu-west-2.rds.amazonaws.com'
 RDS_PORT = 5432
 RDS_DATABASE ='postgres'
-RDS_PASSWORD ='Backoffice2*'
+RDS_PASSWORD ='*********'
 RDS_USER ='postgres'
 DATABASE_TYPE = 'postgresql'
 DBAPI = 'pyscopg2'
 
 engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
 
- # upload_to_db method and store in a table called dim_date_times.
+ #upload_to_db method and store in a table called dim_date_times.
 
  def upload_to_db(dim_date_times, df):
    df.upload_to_db = dim_date_times.replace
@@ -631,9 +663,11 @@ df = pd.read_sql_table('dim_date_times', engine)
 
 
 
-##### Milestone 3 Create the database schema
+### Milestone 3 Create the database schema
 
-##### Task 1 casting the column of the orders_table to the correct data types and input the VARCHAR integers
+
+
+#### Task 1 casting the column of the orders_table to the correct data types and input the VARCHAR integers
 
 
 import pandas as pd
@@ -684,7 +718,7 @@ print(replacements)
 
 
 
-##### Task 2 cast the columns of the dim_user_table to the right data types and input the missing VARCHAR integer
+#### Task 2 cast the columns of the dim_user_table to the right data types and input the missing VARCHAR integer
 
 import pandas as pd
 
@@ -733,7 +767,9 @@ print(replacements)
 #col_str
 
 
-##### Task 3  merging latitude columns 
+
+
+#### Task 3  merging latitude columns 
 
  import pandas as pd
 
@@ -753,13 +789,13 @@ print(replacements)
 #| continent           | TEXT              | VARCHAR(255)           |
 #+---------------------+-------------------+------------------------+
 
-# df['final'] = '[' + df['Latitude'].astype(str) + ', ' + df['Longitude'].astype(str) + ']'
+ df['final'] = '[' + df['Latitude'].astype(str) + ', ' + df['Longitude'].astype(str) + ']'
 
 
 
 
 
-##### Task 4  changes to dim_products weight class
+#### Task 4  changes to dim_products weight class
 
 #Make changes to dim_products
 #+--------------------------+-------------------+
@@ -775,7 +811,8 @@ print(replacements)
  #Integer 255 assigned to VARCHAR.
 
 
-##### Task 5  Update dim_products table to the required data types
+
+#### Task 5  Update dim_products table to the required data types
 
 import pandas as pd
 
@@ -837,7 +874,7 @@ print(replacements)
 
 
 
-##### Task 6 
+#### Task 6 
 
 #Update dim_date_times table and update to the correct data type
 
@@ -863,12 +900,13 @@ print(replacements)
 #| date_uuid       | OBJECT              | UUID             |
 #+-----------------+-------------------+--------------------+
 
-# converting to the right data type.
+#converting to the right data type.
 
 import pandas as pd
 import boto3
 import json
 from sqlalchemy import create_engine
+
 
 bucket = 'daak-bucket'
 link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/date_details.json.'
@@ -893,7 +931,7 @@ df.head()
 
 #cleaning data
 
-#- Drop duplicates 
+#Drop duplicates 
 
 df = df.drop_duplicates()
 df
@@ -915,7 +953,7 @@ df.info()
 RDS_HOST = 'database-1.c7f2i0mwhdgu.eu-west-2.rds.amazonaws.com'
 RDS_PORT = 5432
 RDS_DATABASE ='postgres'
-RDS_PASSWORD ='Backoffice2*'
+RDS_PASSWORD ='********'
 RDS_USER ='postgres'
 DATABASE_TYPE = 'postgresql'
 DBAPI = 'pyscopg2'
@@ -936,7 +974,7 @@ df.to_sql('dim_date_times', engine, if_exists='replace')
 
 df.dtypes
 
-# Replacing data types
+#Replacing data types
 
 replacements = {
     'object': 'varchar(255)',
