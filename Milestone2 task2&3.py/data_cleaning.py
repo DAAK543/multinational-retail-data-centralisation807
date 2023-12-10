@@ -1,4 +1,4 @@
-# Step 6 cleaning user data
+# Task 3 Step 6 cleaning user data
 import sqlalchemy
 from sqlalchemy import create_engine
 import pandas as pd
@@ -61,3 +61,16 @@ df
 
 
 df.info()
+
+# Task 3 step 7
+
+# upload table with upload_to_db method to sale_data database called dim_users
+
+def upload_to_db(dim_users, df):
+   df.upload_to_db = dim_users.replace
+   dim_users.replace = dim_users
+   return df
+     
+# Task 3 step 8
+
+df.to_sql('dim_users', engine, if_exists='replace')

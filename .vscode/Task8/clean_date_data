@@ -2,6 +2,7 @@
 import pandas as pd
 import boto3
 import json
+from sqlalchemy import create_engine
 
 class DataExtractor:
   def extract_from_s3(DataExtractor, df):
@@ -54,12 +55,33 @@ df
 
 df.info()
 
+# my database-1 credentials
+
+RDS_HOST = 'database-1.c7f2i0mwhdgu.eu-west-2.rds.amazonaws.com'
+RDS_PORT = 5432
+RDS_DATABASE ='postgres'
+RDS_PASSWORD ='Backoffice2*'
+RDS_USER ='postgres'
+DATABASE_TYPE = 'postgresql'
+DBAPI = 'pyscopg2'
+
+engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
+
+#  Upload clean data to database with table name dim_date_times.
+
+def upload_to_db(dim_date_times, df):
+   df.upload_to_db = dim_date_times.replace
+   dim_date_times.replace = dim_date_times
+   return df
+     
+  
+df.to_sql('dim_date_times', engine, if_exists='replace')
+
+df
 
 
-#  upload_to_db method and store in a table called dim_date_times.
 
- # df.to_sql('date_details', con=engine, if_exists='replace', index=False)
-
+  
 
 
 

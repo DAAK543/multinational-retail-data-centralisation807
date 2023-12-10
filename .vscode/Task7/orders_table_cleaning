@@ -38,13 +38,26 @@ df
 
 # dropping columns first_name, last_name and 1 from orders_table
 
-df = df.drop(columns=['first_name', 'last_name', '1'], axis=1)
+df = df.drop(columns=['first_name', 'last_name', '1', 'level_0'], axis=1)
 
+df
+
+# Drop duplicates in orders_table
+
+df = df.drop_duplicates()
+
+
+# Resetting index
+df = df.reset_index(drop=True)
 df
 
 df.info()
 
-#  upload_to_db method and store in a table called orders_table
+#Upload cleaned data to a table called orders_table
 
-# df.to_sql('orders_table', engine, if_exists='replace', index=False)
+engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
 
+
+df.to_sql('orders_table', engine, index='False')
+
+df

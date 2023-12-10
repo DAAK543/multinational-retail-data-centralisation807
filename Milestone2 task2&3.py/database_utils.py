@@ -1,3 +1,5 @@
+#Task 3  step 2  
+
 import yaml
 
 RDS_HOST ="data-handling-project-readonly.cq2e8zno855e.eu-west-1.rds.amazonaws.com"
@@ -9,6 +11,8 @@ DATABASE_TYPE = 'postgresql'
 DBAPI = 'pyscopg2'
 
 class DatabaseConnector:
+
+
 
     def read_db_creds(self):
       
@@ -41,9 +45,10 @@ class DatabaseConnector:
  # Creating an instance of the class
 
 connector = DatabaseConnector('RDS_HOST', 'RDS_PORT', 'RDS_DATABASE', 'RDS_USER', 'RDS_PASSWORD') 
-read_db_creds = connector.read_db_creds()    
+read_db_creds = connector.read_db_creds()   
+ 
 
-# Step 3 creating an _init_db_engine method to read credentials from the return of read_db_creds and initialise and return an sqlalchemy database engine.
+# Task 3 Step 3 creating an _init_db_engine method to read credentials from the return of read_db_creds and initialise and return an sqlalchemy database engine.
 
 # _init_db_engine method
 
@@ -65,7 +70,7 @@ class Connector:
        
 engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
 
-# Step 4 getting a list of table names in the database using list_db_tables method
+# Task 3 Step 4 getting a list of table names in the database using list_db_tables method
 
 class List:
    
@@ -148,6 +153,22 @@ df = df.drop(columns=['first_name', 'last_name'], axis=1)
 df
 
 df.info()
+
+
+# upload table with upload_to_db method to sale_data database called dim_users
+
+# Task 2 step 7
+def upload_to_db(dim_users, df):
+   df.upload_to_db = dim_users.replace
+   dim_users.replace = dim_users
+   return df
+     
+ # Task 2 step 8 
+
+df.to_sql('dim_users', engine, if_exists='replace')
+
+
+
      
 
 

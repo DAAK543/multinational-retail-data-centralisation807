@@ -125,6 +125,7 @@ class Connector:
        
 engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
 
+
 ##### Step 4 getting a list of table names in the database using list_db_tables method
 
 class DataExtractor:
@@ -140,6 +141,7 @@ class DataExtractor:
 engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
 insp = inspect(engine)
 print(insp.get_table_names())
+
 
 ##### To get schema information and schema public
 
@@ -271,23 +273,54 @@ print(df)
 
 ##### Step 7
 
+upload table with upload_to_db method to sale_data database called dim_users
+
+def upload_to_db(dim_users, df):
+   df.upload_to_db = dim_users.replace
+   dim_users.replace = dim_users
+   return df
+
+     
 ##### Step 8
 
+df.to_sql('dim_users', engine, if_exists='replace')
+
+
+
+
+
+
 ##### Task 4 Extracting users and cleaning card details
+
 
 ##### Step 1 
 
 install tabula-py to extract data from a pdf document
 
+
 ##### step 2 create a method in the DatExtractor class called retrieve_pdf_data that takes a link as argument and returns a pandas Dataframe
 
+
+import sqlalchemy
 import pandas as pd 
 import tabula 
-from tabula import read_pdf
+from sqlalchemy import create_engine
+
+
+RDS_HOST ="data-handling-project-readonly.cq2e8zno855e.eu-west-1.rds.amazonaws.com"
+RDS_PORT = 5432
+RDS_DATABASE ='postgres'
+RDS_PASSWORD ='AiCore2022'
+RDS_USER ='aicore_admin'
+DATABASE_TYPE = 'postgresql'
+DBAPI = 'pyscopg2'
+
+engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
 
 
 
 pdf_path = "https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf"
+
 
 class DataExtractor:
 
@@ -306,7 +339,9 @@ class DataExtractor:
  print(len(df))
  df[0]
 
+
 ##### Step 3 create a method called clean_card_data  in the DataCleaning class to remove any errors or Null values
+
 
 class DataCleaning: 
   def  clean_card_data(DataCleaning, df):
@@ -352,13 +387,15 @@ class DataCleaning:
 ##### Step 4 upload table with upload_to_db method to the database in a table called dim_card_details.
 
   def upload_to_db(dim_card_details, df):
-   df.upload_to_db = dim_card_details.append
-   dim_card_details.append = dim_card_details
+   df.upload_to_db = dim_card_details.replace
+   dim_card_details.replace = dim_card_details
    return df
      
-  #df = df.to_sql('dim_card_details', engine, if_exists='append')
+  
+  df.to_sql('dim_card_details', engine, if_exists='replace')
 
-   Error notification (Internal Error)
+  df = pd.read_sql_table('dim_card_details', engine)
+
 
 
 ##### Task 5
@@ -459,26 +496,43 @@ def upload_to_db(df):
    upload_to_db = pd.read_sql_table()
    return df
 
+
 df = pd.read_sql_table('orders_table', engine)
 
 print(df)
 df
 
 
-Cleaning orders table
+Cleaning orders table  and storing to orders_table
 
  dropping columns first_name, last_name and 1 from orders_table
 
- df = df.drop(columns=['first_name', 'last_name', '1'], axis=1)
+df = df.drop(columns=['first_name', 'last_name', '1', 'level_0'], axis=1)
 
- df
+df
+
+# Drop duplicates in orders_table
+
+df = df.drop_duplicates()
+
+
+# Resetting index
+
+df = df.reset_index(drop=True)
+df
+
 
 df.info()
 
+#Upload cleaned data to a table called orders_table
 
- upload_to_db method and store in a table called orders_table
 
- #df.to_sql('orders_table', engine, if_exists='replace', index=False)
+
+engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
+
+
+df.to_sql('orders_table', engine, index='False')
+
 
 
 
@@ -547,7 +601,359 @@ df
 
 df.info()
 
+ #My database-1 credentials for uploading cleaned date_details to table called dim_date_times
 
-upload_to_db method and store in a table called dim_date_times.
+RDS_HOST = 'database-1.c7f2i0mwhdgu.eu-west-2.rds.amazonaws.com'
+RDS_PORT = 5432
+RDS_DATABASE ='postgres'
+RDS_PASSWORD ='Backoffice2*'
+RDS_USER ='postgres'
+DATABASE_TYPE = 'postgresql'
+DBAPI = 'pyscopg2'
 
- #df.to_sql('date_details', con=engine, if_exists='replace', index=False)
+engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
+
+ # upload_to_db method and store in a table called dim_date_times.
+
+ def upload_to_db(dim_date_times, df):
+   df.upload_to_db = dim_date_times.replace
+   dim_date_times.replace = dim_date_times
+   return df
+     
+  
+df.to_sql('dim_date_times', engine, if_exists='replace')
+
+df
+
+df = pd.read_sql_table('dim_date_times', engine)
+
+
+
+
+
+##### Milestone 3 Create the database schema
+
+##### Task 1 casting the column of the orders_table to the correct data types and input the VARCHAR integers
+
+
+import pandas as pd
+
+
+#+------------------+--------------------+--------------------+
+#|   orders_table   | current data type  | required data type |
+#+------------------+--------------------+--------------------+
+#| date_uuid        | TEXT               | UUID               |
+#| user_uuid        | TEXT               | UUID               |
+#| card_number      | TEXT               | VARCHAR(255)       |
+#| store_code       | TEXT               | VARCHAR(255)       |
+#| product_code     | TEXT               | VARCHAR(255)       |
+#| product_quantity | BIGINT             | SMALLINT           |
+#+------------------+--------------------+--------------------+
+
+
+#print(df)
+
+
+def castorders_table ():
+#create table orders_table
+
+ df = pd.DataFrame
+
+ df.dtypes 
+
+("""
+    date_uuid     TEXT
+    user_uuid     TEXT
+    card_number   TEXT
+    store_code:   TEXT
+    product_code  TEXT
+    product_code  BIGINT
+""")
+
+replacements = {
+    'TEXT': 'UUID',
+    'TEXT': 'VARCHAR(255)',
+    'BIGINT': 'SMALLINT',
+}
+
+print(replacements)
+
+#col_str = ",".join("{}{}".format(n, d) for (n, d) in zip(df.columns, df.dtypes.replace(replacements)))
+
+#col_str
+
+
+
+##### Task 2 cast the columns of the dim_user_table to the right data types and input the missing VARCHAR integer
+
+import pandas as pd
+
+Cast the columns of the dim_user_table to the right data types
+#+----------------+--------------------+--------------------+
+#| dim_user_table | current data type  | required data type |
+#+----------------+--------------------+--------------------+
+#| first_name     | TEXT               | VARCHAR(255)       |
+#| last_name      | TEXT               | VARCHAR(255)       |
+#| date_of_birth  | TEXT               | DATE               |
+#| country_code   | TEXT               | VARCHAR(255)       |
+#| user_uuid      | TEXT               | UUID               |
+#| join_date      | TEXT               | DATE               |
+#+----------------+--------------------+--------------------+
+
+#print(df)
+
+
+def dim_user_table ():
+ 
+#create table dim_user_table
+
+ df = pd.DataFrame
+
+ df.dtypes 
+
+("""
+    first_name     TEXT
+    last_name      TEXT
+    date_of_birth  TEXT
+    country_code   TEXT
+    user_uuid      TEXT
+    join_data      TEXT
+""")
+
+replacements = {
+    'TEXT': 'DATE',
+    'TEXT': 'VARCHAR(255)',
+    'TEXT': 'UUID',
+}
+
+print(replacements)
+
+#col_str = ",".join("{}{}".format(n, d) for (n, d) in zip(df.columns, df.dtypes.replace(replacements)))
+
+#col_str
+
+
+##### Task 3  merging latitude columns 
+
+ import pandas as pd
+
+ Merging latitude columns in dim_store_details
+ 
+#+---------------------+-------------------+------------------------+
+#| store_details_table | current data type |   required data type   |
+#+---------------------+-------------------+------------------------+
+#| longitude           | TEXT              | FLOAT                  |
+#| locality            | TEXT              | VARCHAR(255)           |
+#| store_code          | TEXT              | VARCHAR(255)           |
+#| staff_numbers       | TEXT              | SMALLINT               |
+#| opening_date        | TEXT              | DATE                   |
+#| store_type          | TEXT              | VARCHAR(255) NULLABLE  |
+#| latitude            | TEXT              | FLOAT                  |
+#| country_code        | TEXT              | VARCHAR(255)           |
+#| continent           | TEXT              | VARCHAR(255)           |
+#+---------------------+-------------------+------------------------+
+
+# df['final'] = '[' + df['Latitude'].astype(str) + ', ' + df['Longitude'].astype(str) + ']'
+
+
+
+
+
+##### Task 4  changes to dim_products weight class
+
+#Make changes to dim_products
+#+--------------------------+-------------------+
+#| weight_class VARCHAR(255)| weight range(kg)  |
+#+--------------------------+-------------------+
+#| Light            |   1   | < 2               |
+#| Mid_Sized        |   20  | >= 2 - < 40       |
+#| Heavy            |   10  | >= 40 - < 140     |
+#| Truck_Required   |   70  | => 140            |
+#+----------------------------+-----------------+
+
+ #New column weight class added based on approximate weight average for each category
+ #Integer 255 assigned to VARCHAR.
+
+
+##### Task 5  Update dim_products table to the required data types
+
+import pandas as pd
+
+Update dim_products table to the required data types
+
+#+-----------------+--------------------+--------------------+
+#|  dim_products   | current data type  | required data type |
+#+-----------------+--------------------+--------------------+
+#| product_price   | TEXT               | FLOAT              |
+#| weight          | TEXT               | FLOAT              |
+#| EAN             | TEXT               | VARCHAR(255)       |
+#| product_code    | TEXT               | VARCHAR(255)       |
+#| date_added      | TEXT               | DATE               |
+#| uuid            | TEXT               | UUID               |
+#| still_available | TEXT               | BOOL               |
+#| weight_class    | TEXT               | VARCHAR(255)       |
+#+-----------------+--------------------+--------------------+
+
+
+#print(df)
+
+
+def dim_products ():
+#create table orders_table
+
+ df = pd.DataFrame
+
+ df.dtypes 
+
+
+("""
+    product_price     TEXT
+    Weight            TEXT
+    EAN               TEXT
+    product_code      TEXT
+    date_added        TEXT
+    uuid              TEXT
+    still_available   TEXT 
+    weight_class      TEXT
+
+
+""")
+
+replacements = {
+    'TEXT': 'FLOAT',
+    'TEXT': 'VARCHAR(255)',
+    'TEXT': 'DATE',
+    'TEXT': 'UUID',
+    'TEXT': 'BOOL'
+}
+
+
+print(replacements)
+
+#col_str = ",".join("{}{}".format(n, d) for (n, d) in zip(df.columns, df.dtypes.replace(replacements)))
+
+#col_str
+
+
+
+
+##### Task 6 
+
+#Update dim_date_times table and update to the correct data type
+
+#+-----------------+-------------------+--------------------+
+#| dim_date_times  | current data type | required data type |
+#+-----------------+-------------------+--------------------+
+#| month           | TEXT              | VARCHAR(?)         |
+#| year            | TEXT              | VARCHAR(?)         |
+#| day             | TEXT              | VARCHAR(?)         |
+#| time_period     | TEXT              | VARCHAR(?)         |
+#| date_uuid       | TEXT              | UUID               |
+#+-----------------+-------------------+--------------------+
+
+#updated  dim_date_times table
+
+#+-----------------+-------------------+--------------------+
+#| dim_date_times  | current data type | required data type |
+#+-----------------+-------------------+--------------------+
+#| month           | OBJECT              | VARCHAR(255)     |
+#| year            | OBJECT              | VARCHAR(255)     |
+#| day             | OBJECT              | VARCHAR(255)     |
+#| time_period     | OBJECT              | VARCHAR(255)     |
+#| date_uuid       | OBJECT              | UUID             |
+#+-----------------+-------------------+--------------------+
+
+# converting to the right data type.
+
+import pandas as pd
+import boto3
+import json
+from sqlalchemy import create_engine
+
+bucket = 'daak-bucket'
+link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/date_details.json.'
+
+
+#link uploaded to daak-bucket to give a path
+#link path in daak-bucket = 's3://daak-bucket/date_details.json'
+
+path = 's3://daak-bucket/date_details.json'
+
+client = boto3.client('s3')
+
+path = 's3://daak-bucket/date_details.json'
+
+df =  pd.read_json(path)
+
+#s3f3 and botocore==1.33.5 were installed respectively to ensure efficient processing
+
+print(df)
+
+df.head()
+
+#cleaning data
+
+#- Drop duplicates 
+
+df = df.drop_duplicates()
+df
+
+
+#Removing null values
+df = df.replace('null','')
+df
+
+df = df.fillna('')
+df
+
+#Resetting index
+df = df.reset_index(drop=True)
+df
+
+df.info()
+
+RDS_HOST = 'database-1.c7f2i0mwhdgu.eu-west-2.rds.amazonaws.com'
+RDS_PORT = 5432
+RDS_DATABASE ='postgres'
+RDS_PASSWORD ='Backoffice2*'
+RDS_USER ='postgres'
+DATABASE_TYPE = 'postgresql'
+DBAPI = 'pyscopg2'
+
+
+engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")
+
+
+#Upload cleaned data to database with table name dim_date_times.
+
+def upload_to_db(dim_date_times, df):
+   df.upload_to_db = dim_date_times.replace
+   dim_date_times.replace = dim_date_times
+   return df
+     
+  
+df.to_sql('dim_date_times', engine, if_exists='replace')
+
+df.dtypes
+
+# Replacing data types
+
+replacements = {
+    'object': 'varchar(255)',
+    'object': 'uuid'
+}
+
+
+print(replacements)
+
+
+#Column string
+
+col_str = ", ".join("{} {}".format(n, d) for (n, d) in zip(df.columns, df.dtypes))
+
+print(col_str)
+
+
+col_str = ", ".join("{} {}".format(n, d) for (n, d) in zip(df.columns, df.dtypes.replace(replacements)))
+
+print(col_str)

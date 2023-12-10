@@ -1,0 +1,9 @@
+#RDS_HOST = 'database-1.c7f2i0mwhdgu.eu-west-2.rds.amazonaws.com'
+RDS_PORT = 5432
+RDS_DATABASE ='postgres'
+RDS_PASSWORD ='Backoffice2**'
+RDS_USER ='postgres'
+DATABASE_TYPE = 'postgresql'
+DBAPI = 'pyscopg2'
+
+engine = create_engine(f"{DATABASE_TYPE}://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}/{RDS_DATABASE}")

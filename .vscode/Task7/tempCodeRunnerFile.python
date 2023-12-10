@@ -1,0 +1,4 @@
+df = pd.read_sql_table('orders_table', engine)
+
+print(df)
+df
