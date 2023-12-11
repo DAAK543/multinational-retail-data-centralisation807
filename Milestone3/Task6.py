@@ -1,29 +1,35 @@
 
 #Update dim_date_times table and update to the correct data type
 
-#+-----------------+-------------------+--------------------+
-#| dim_date_times  | current data type | required data type |
-#+-----------------+-------------------+--------------------+
-#| month           | TEXT              | VARCHAR(?)         |
-#| year            | TEXT              | VARCHAR(?)         |
-#| day             | TEXT              | VARCHAR(?)         |
-#| time_period     | TEXT              | VARCHAR(?)         |
-#| date_uuid       | TEXT              | UUID               |
-#+-----------------+-------------------+--------------------+
-
 #updated  dim_date_times table
 
-#+-----------------+-------------------+--------------------+
-#| dim_date_times  | current data type | required data type |
-#+-----------------+-------------------+--------------------+
-#| month           | OBJECT              | VARCHAR(255)     |
-#| year            | OBJECT              | VARCHAR(255)     |
-#| day             | OBJECT              | VARCHAR(255)     |
-#| time_period     | OBJECT              | VARCHAR(255)     |
-#| date_uuid       | OBJECT              | UUID             |
-#+-----------------+-------------------+--------------------+
+#dim_date_times 
+# month           
+# year            
+# day             
+# time_period      
+# date_uuid            
 
-# converting to the right data type.
+
+
+#Current data type
+object
+object
+object
+object
+object
+
+
+#Reguired data type
+#VARCHAR(255) 
+#VARCHAR(255) 
+#VARCHAR(255) 
+#VARCHAR(255) 
+#UUID
+
+
+
+#converting to the right data type.
 
 import pandas as pd
 import boto3
@@ -108,3 +114,4 @@ print(col_str)
 col_str = ", ".join("{} {}".format(n, d) for (n, d) in zip(df.columns, df.dtypes.replace(replacements)))
 
 print(col_str)
+

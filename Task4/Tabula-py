@@ -70,7 +70,9 @@ class DataCleaning:
   # resetting index
   df = df.reset_index(drop=True)
   df
-
+  
+  df.head(5)
+  
   df.info()
 
 # upload table with upload_to_db method to the database in a table called dim_card_details.
@@ -80,11 +82,12 @@ class DataCleaning:
    dim_card_details.replace = dim_card_details
    return df
      
-  
+  df.dtypes
 
   df.to_sql('dim_card_details', engine, if_exists='replace')
+  
 
-  df = pd.read_sql_table('dim_date_times', engine)
+  df = pd.read_sql_table('dim_card_details', engine)
 
 
 

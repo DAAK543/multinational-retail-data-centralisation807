@@ -18,19 +18,20 @@ import pandas as pd
 
 def dim_user_table ():
  
-#create table dim_user_table
+#create table dim_users_table
 
  df = pd.DataFrame
 
  df.dtypes
-
+ 
+# current data type for dim_users_table
 ("""
     first_name     TEXT
     last_name      TEXT
     date_of_birth  TEXT
     country_code   TEXT
     user_uuid      TEXT
-    join_data      TEXT
+    join_date      TEXT
 """)
 
 replacements = {
