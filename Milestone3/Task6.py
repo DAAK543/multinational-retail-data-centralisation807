@@ -100,8 +100,8 @@ df.dtypes
 
 
 replacements = {
-    'object': 'varchar(255)',
-    'object': 'uuid'
+    'TEXT': 'varchar(255)',
+    'TEXT': 'uuid'
 }
 
 
