@@ -1275,6 +1275,27 @@ Chapletown has the most stores with a total of 14 stores followed by Belper with
 
 
 
+#### Task 3 - Which monthproduced the largest amount of sales.
 
+using pgAdmin to run the query below
+
+SELECT
+	EXTRACT(
+		MONTH
+		FROM
+			date_uuid
+	) AS month,
+	SUM(sales_amount) AS total_sales
+FROM
+	orders_table
+GROUP BY
+	month
+ORDER BY
+	total_sales DESC
+LIMIT
+	1;
+
+
+#### Task 4
 
 
