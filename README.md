@@ -1312,7 +1312,7 @@ LIMIT
 
 #### Task 4 - How many sales are coming from online
 
-Using pgAdminto run the query below
+Using pgAdmin4 to run the query below
 
 SELECT
    COUNT(*) AS online_sales_count 
@@ -1334,6 +1334,23 @@ please see online_sales_counter above.
 
 #### Task 5
 
+
+
+#### Task 6 -which month in each year producedthe highest cost of sales?
+
+Using pgAdmin4 to run the query below
+
+SELECT 
+EXTRACT(YEAR FROM date_uuid) as year,
+EXTRACT(MONTH FROM date_uuid) as month,
+SUM(product_quantity) as cost_of_sales
+FROM orders_table
+GROUP BY year, month
+ORDER BY year, cost_of_sales DESC
+LIMIT 1;
+
+
+#### Task 7 
 
 
 

@@ -1,13 +1,5 @@
-SELECT
-   COUNT(*) AS online_sales_count 
-FROM
-   orders_table 
-WHERE
-   store_code IS NOT NULL 
-GROUP BY
-   product_quantity;
-
-
-
+SELECT staff_numbers as staff_headcount
+FROM country_code
+GROUP BY legacy_store_details;
 
     
