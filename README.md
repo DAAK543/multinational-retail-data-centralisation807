@@ -1249,7 +1249,7 @@ for row in result:
 
 ##### Using pgAdmin to execute the query below to get the number_of_stores per country
 
-Query = SELECT country_code, COUNT(*) AS number_of_stores
+SELECT country_code, COUNT(*) AS number_of_stores
 FROM legacy_store_details
 GROUP BY country_code;SELECT country_code, COUNT(*) AS number_of_stores
 FROM legacy_store_details
@@ -1272,7 +1272,7 @@ DE - 141
 
 using pgAdmin to run the query below
 
-Query = SELECT locality, COUNT(*) AS store_count
+SELECT locality, COUNT(*) AS store_count
 FROM legacy_store_details
 GROUP BY locality
 ORDER BY store_count DESC;
@@ -1350,9 +1350,16 @@ ORDER BY year, cost_of_sales DESC
 LIMIT 1;
 
 
-#### Task 7 
+#### Task 7  - staff head count
+
+Using pgAdmin4 to run the query below
+
+SELECT country_code, COUNT(*) AS total_staff_numbers
+FROM legacy_store_details; SELECT country_code AS total_staff_numbers WHERE total_staff_numbers IS NOT NULL
+GROUP BY legacy_store_details;
 
 
 
+#### Task 8
 
-
+#### Task 9
