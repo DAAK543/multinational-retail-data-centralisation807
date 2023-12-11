@@ -1,4 +1,12 @@
-SELECT COUNT(*) FROM orders_table WHERE product_code OR user_uuid = 'Online';
+SELECT
+   COUNT(*) AS online_sales_count 
+FROM
+   orders_table 
+WHERE
+   store_code IS NOT NULL 
+GROUP BY
+   product_quantity;
+
 
 
 

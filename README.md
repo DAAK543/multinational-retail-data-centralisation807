@@ -878,27 +878,29 @@ print(replacements)
 
 #Update dim_date_times table and update to the correct data type
 
-#+-----------------+-------------------+--------------------+
-#| dim_date_times  | current data type | required data type |
-#+-----------------+-------------------+--------------------+
-#| month           | TEXT              | VARCHAR(?)         |
-#| year            | TEXT              | VARCHAR(?)         |
-#| day             | TEXT              | VARCHAR(?)         |
-#| time_period     | TEXT              | VARCHAR(?)         |
-#| date_uuid       | TEXT              | UUID               |
-#+-----------------+-------------------+--------------------+
 
-#updated  dim_date_times table
+#dim_date_times 
+month  
+year   
+day          
+time_period 
+date_uuid   
 
-#+-----------------+-------------------+--------------------+
-#| dim_date_times  | current data type | required data type |
-#+-----------------+-------------------+--------------------+
-#| month           | OBJECT              | VARCHAR(255)     |
-#| year            | OBJECT              | VARCHAR(255)     |
-#| day             | OBJECT              | VARCHAR(255)     |
-#| time_period     | OBJECT              | VARCHAR(255)     |
-#| date_uuid       | OBJECT              | UUID             |
-#+-----------------+-------------------+--------------------+
+
+#Current data type
+TEXT
+TEXT
+TEXT
+TEXT
+TEXT
+
+
+#Required data type
+VARCHAR(255)
+VARCHAR(255)
+VARCHAR(255)
+VARCHAR(255)
+UUID
 
 #converting to the right data type.
 
@@ -1002,13 +1004,24 @@ print(col_str)
 
 #Update dim_card_details - update the last table for card details.
 
-#+------------------------+-------------------+--------------------+
-#|    dim_card_details    | current data type | required data type |
-#+------------------------+-------------------+--------------------+
-#| card_number            | TEXT              | VARCHAR(255)       |
-#| expiry_date            | TEXT              | VARCHAR(255)       |
-#| date_payment_confirmed | TEXT              | DATE               |
-#+------------------------+-------------------+--------------------+
+
+#dim_card_details   
+card_number    
+#expiry_date            
+#date_payment_confirmed 
+
+
+#Current data type
+TEXT
+TEXT
+TEXT
+
+
+#Required data type
+VARCHAR(255)
+VARCHAR(255)
+DATE
+
 
 import sqlalchemy
 import pandas as pd 
@@ -1275,7 +1288,7 @@ Chapletown has the most stores with a total of 14 stores followed by Belper with
 
 
 
-#### Task 3 - Which monthproduced the largest amount of sales.
+#### Task 3 - Which months produced the largest amount of sales.
 
 using pgAdmin to run the query below
 
@@ -1296,6 +1309,33 @@ LIMIT
 	1;
 
 
-#### Task 4
+
+#### Task 4 - How many sales are coming from online
+
+Using pgAdminto run the query below
+
+SELECT
+   COUNT(*) AS online_sales_count 
+FROM
+   orders_table 
+WHERE
+   store_code IS NOT NULL 
+GROUP BY
+   product_quantity;
+
+
+#Outcome
+
+![Alt text](image-2.png)
+
+please see online_sales_counter above.
+
+
+
+#### Task 5
+
+
+
+
 
 
